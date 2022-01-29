@@ -1,0 +1,19 @@
+{
+  "include": ["src/**/*.ts", "test/**/*.ts"],
+  "exclude": [],
+  "compilerOptions": {
+    "isolatedModules": true,
+    "module": "ESNext",
+    "types": ["vite/client", "vitest/globals"],
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "lib": [
+      "es2016",
+      "dom"
+    ]
+  }
+}

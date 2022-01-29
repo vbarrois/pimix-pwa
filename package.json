@@ -1,0 +1,38 @@
+{
+  "name": "pimix-pwa",
+  "version": "0.0.0",
+  "license": "ISC",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint --ext .js,.vue --ignore-path .gitignore --fix src",
+    "format": "prettier .",
+    "test": "vitest"
+  },
+  "dependencies": {
+    "@babel/plugin-proposal-decorators": "^7.16.7",
+    "axios": "^0.25.0",
+    "lodash": "^4.17.21",
+    "vue": "^3.2.25",
+    "vue3-lazyload": "^0.2.5-beta"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.16.12",
+    "@babel/eslint-parser": "^7.16.5",
+    "@babel/plugin-transform-typescript": "^7.16.8",
+    "@types/lodash": "^4.14.178",
+    "@types/node": "^17.0.12",
+    "@vitejs/plugin-vue": "^2.0.0",
+    "autoprefixer": "^10.4.2",
+    "eslint": "^8.7.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-vue": "^8.4.0",
+    "postcss": "^8.4.5",
+    "prettier": "^2.5.1",
+    "tailwindcss": "^3.0.17",
+    "vite": "latest",
+    "vitest": "latest",
+    "vue-class-component": "8.0.0-rc.1"
+  }
+}

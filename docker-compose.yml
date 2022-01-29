@@ -1,0 +1,23 @@
+version: "2.0"
+services:
+  pwa:
+    build: .
+    image: vbarrois/pimix-pwa
+    container_name: pimix-pwa
+    privileged: true
+    environment:
+      - NODE_ENV=development
+      - MUSIC_FOLDER=/home/music
+      - COVER_FOLDER=/home/covers
+      - PIMIX_ROUTER=127.0.0.1:82
+      - WAIT_HOSTS=127.0.0.1:6379
+      - CHOKIDAR_USEPOLLING=true
+      - REST_PORT=91
+      - SERVER_PORT=92
+    volumes:
+      - .:/usr/src/pimix/pimix-pwa
+      - /home/music:/home/music
+    working_dir: /usr/src/pimix/pimix-pwa
+    network_mode: host
+    ports:
+      - 92:92
