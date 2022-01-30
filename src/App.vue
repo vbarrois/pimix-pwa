@@ -8,12 +8,12 @@ import AppFooter from "./components/AppFooter.vue"
 <template>
   <main class="flex flex-col h-screen">
     <div class="flex flex-1 overflow-hidden">
-      <div class="flex max-w-30"><AppMenu /></div>
+      <div class="flex max-w-30 bg-gray-900"><AppMenu /></div>
       <div class="flex flex-1 flex-col">
-        <div class="flex h-16 p-4"><AppHeader /></div>
+        <div class="flex h-14 p-2"><AppHeader /></div>
         <div class="flex flex-1 overflow-y-auto paragraph px-4"><AppContainer /></div>
       </div>
     </div>
-    <div class="flex"><AppFooter /></div>
+    <div class="flex bg-gray-900"><AppFooter /></div>
   </main>
 </template>

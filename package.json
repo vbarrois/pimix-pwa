@@ -13,7 +13,9 @@
   "dependencies": {
     "@babel/plugin-proposal-decorators": "^7.16.7",
     "axios": "^0.25.0",
+    "dayjs": "^1.10.7",
     "lodash": "^4.17.21",
+    "mitt": "^3.0.0",
     "vue": "^3.2.25",
     "vue3-lazyload": "^0.2.5-beta"
   },
@@ -24,6 +26,7 @@
     "@types/lodash": "^4.14.178",
     "@types/node": "^17.0.12",
     "@vitejs/plugin-vue": "^2.0.0",
+    "@vue/compiler-sfc": "^3.2.29",
     "autoprefixer": "^10.4.2",
     "eslint": "^8.7.0",
     "eslint-config-prettier": "^8.3.0",

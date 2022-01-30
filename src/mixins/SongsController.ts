@@ -35,8 +35,20 @@ const loadSong = (_id: number): Promise<Song> => {
   })
 }
 
-const getCoverURL = (_id: number): string => {
-  return `http://${REST_SERVER}/api/song/thumb/${_id}`
+const getLastAdded = (_count: number): Promise<Song[]> => {
+  return new Promise<Song[]>((resolve) => {
+    request(`api/songs/last/${_count}`)
+      .then((response: AxiosResponse) => {
+        console.log('song controller', 'last', _count, response.data)
+
+        resolve(_.map(response.data, (song) => {
+          return song
+        }))
+      })
+      .catch(() => {
+        resolve([])
+      })
+  })
 }
 
 export const SongsController = () => {
@@ -53,10 +65,24 @@ export const SongsController = () => {
     return await loadSong(_id)
   }
 
+  async function getLast (_count: number): Promise<Song[]> {
+    return await getLastAdded(_count)
+  }
+
+  const getThumb = (_id: number): string => {
+    return `http://${REST_SERVER}/api/song/thumb/${_id}`
+  }
+
+  const getCover = (_id: number): string => {
+    return `http://${REST_SERVER}/api/song/cover/${_id}`
+  }
+  
   return {
     controller,
     getList,
-    loadSong,
-    getCoverURL
+    getSong,
+    getCover,
+    getThumb,
+    getLast
   }
 }
