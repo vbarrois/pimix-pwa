@@ -1,7 +1,10 @@
 import mitt, {Emitter} from "mitt"
-import { VueElement } from "vue"
+import { PimixServer, PlayList, PlayListItem } from "./IPimix"
 
 export type PimixEvent = {
+  router: { status: boolean, attachedPimixId?: string }
+  playlist: { action: string, playlist?: PlayList, item?: PlayListItem }
+  pimixserver: { list: PimixServer[] }
   header: { action: string, data?: any }
   container: { component: string }
 }

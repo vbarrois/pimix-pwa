@@ -2,6 +2,8 @@
   "include": ["src/**/*.ts", "test/**/*.ts", "src/main.js"],
   "exclude": [],
   "compilerOptions": {
+    "baseUrl": ".",
+    "target": "es5",
     "isolatedModules": true,
     "module": "ESNext",
     "types": ["vite/client", "vitest/globals"],
@@ -9,7 +11,7 @@
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["src/*"]
     },
     "lib": [
       "es2016",

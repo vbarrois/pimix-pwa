@@ -1,9 +1,17 @@
 import App from "./App.vue"
-import { createApp } from "vue"
+import { createApp, reactive } from "vue"
 import VueLazyLoad from 'vue3-lazyload'
 
 import "./css/index.css"
 
 const pimix = createApp(App)
+
+const store = reactive({
+  playlist: {
+    playlistUUID: '',
+    list: []
+  }
+})
+pimix.provide('Store', store)
 pimix.use(VueLazyLoad, {})
-pimix.mount("#pimix");
+pimix.mount("#pimix")

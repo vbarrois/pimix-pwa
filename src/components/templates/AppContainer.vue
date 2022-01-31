@@ -5,31 +5,31 @@ import { eventBus } from '@/mixins/EventsManager'
 import { defineAsyncComponent } from '@vue/runtime-dom'
 
 const DashBoard = defineAsyncComponent(() =>
-  import('@/components/Dashboard.vue')
+  import('@/components/templates/Dashboard.vue')
 )
 
 const Songs = defineAsyncComponent(() =>
-  import('@/components/Songs.vue')
+  import('@/components/templates/Songs.vue')
 )
 
 const Artists = defineAsyncComponent(() =>
-  import('@/components/Artists.vue')
+  import('@/components/templates/Artists.vue')
 )
 
 const Genres = defineAsyncComponent(() =>
-  import('@/components/Genres.vue')
+  import('@/components/templates/Genres.vue')
 )
 
 const Settings = defineAsyncComponent(() =>
-  import('@/components/Settings.vue')
+  import('@/components/templates/Settings.vue')
 )
 
 const Player = defineAsyncComponent(() =>
-  import('@/components/Player.vue')
+  import('@/components/templates/Player.vue')
 )
 
 const Playlist = defineAsyncComponent(() =>
-  import('@/components/Playlist.vue')
+  import('@/components/templates/Playlist.vue')
 )
 
 @Options({})

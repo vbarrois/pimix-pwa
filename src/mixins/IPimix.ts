@@ -1,3 +1,7 @@
+export interface PimixStore {
+  playlist: PlayList
+}
+
 export interface Artist {
   id: number
   name: string
@@ -40,4 +44,37 @@ export interface Song {
   updatedAt: string
   Genres: Genre[]
   Artits: Artist[]
+}
+
+export interface PimixServer {
+  id: string
+  sessionid: string
+  name: string
+  nbtracks: number
+  activetrack: number
+  playonstart: boolean
+  shuffle: boolean
+  gain: number
+  volume: number
+  seekmode: number
+  seeklength: number
+  leavemode: number
+  leavelength: number
+  fadeinduration: number
+  fadeoutduration: number
+  nbclient: number
+}
+
+export interface PlayListItem {
+  uuid: string
+  createdAt: string
+  executed?: boolean
+  origin?: string
+  points?: number,
+  song?: Song
+}
+
+export interface PlayList {
+  playingUUID: string,
+  list: PlayListItem[]
 }

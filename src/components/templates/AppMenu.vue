@@ -1,11 +1,33 @@
 <script lang='ts'>
-import { Options, Vue, setup } from 'vue-class-component'
+import _ from 'lodash'
+import { Options, setup, Vue } from 'vue-class-component'
 import { eventBus } from '@/mixins/EventsManager'
-import { ref } from '@vue/reactivity'
+import { reactive } from '@vue/reactivity'
+import { MenuController } from '@/components/controllers/MenuController'
 
 @Options({})
-export default class AppHeader extends Vue {
+export default class AppMenu extends Vue {
+
+  controller = setup(() => MenuController())
+
+  router = reactive({
+    state: false,
+    attachedPimixId: null
+  })
+
   activeButton = 'dashboard'
+
+  mounted () {
+    eventBus.on('router', (_event: { status: boolean, attachedPimixId?: string }) => {
+      console.log('router message', _event)
+      this.router.state = _event.status
+      this.router.attachedPimixId = _event.attachedPimixId
+    })
+  }
+
+  destroyed () {
+    eventBus.off('router')
+  }
 
   loadComponent (_name: string): void {
     this.activeButton = _name
@@ -15,6 +37,14 @@ export default class AppHeader extends Vue {
   buttonClass (_name: string): string {
     return this.activeButton === _name ? 'bg-gray-700 text-yellow-300' : 'hover:bg-gray-700 hover:text-gray-300'
   }
+
+  routerStateClass (): string {
+    if (!this.router.state) {
+      return 'bg-red-500'
+    } else {
+      return !_.isNil(this.router.attachedPimixId) ? 'bg-green-500' : 'bg-yellow-500'
+    }
+  }
 }
 </script>
 
@@ -23,7 +53,7 @@ export default class AppHeader extends Vue {
   <div
     class="flex flex-col items-center w-full h-full overflow-hidden text-gray-400"
   >
-    <a class="flex items-center w-full px-3 mt-3" href="#">
+    <a class="relative flex items-center w-full px-3 mt-3" href="#">
       <svg
         class="w-8 h-8 fill-current"
         xmlns="http://www.w3.org/2000/svg"
@@ -35,6 +65,9 @@ export default class AppHeader extends Vue {
         />
       </svg>
       <span class="ml-2 hidden md:block text-xl font-bold">Pimix</span>
+      <span
+        class="absolute top-0 left-0 w-2 h-2 mt-2 ml-2  rounded-full" :class="routerStateClass()"
+      ></span>
     </a>
     <div class="w-full px-2">
       <div
@@ -153,10 +186,7 @@ export default class AppHeader extends Vue {
             />
           </svg>
           <span class="hidden md:block ml-2 text-sm font-medium">Player</span>
-          <span
-            class="absolute top-0 left-0 w-2 h-2 mt-2 ml-2 bg-indigo-500 rounded-full"
-          ></span>
-        </a>
+       </a>
         <a
           class="flex items-center w-full h-12 px-3 mt-2 rounded"
           href="#"
@@ -200,6 +230,9 @@ export default class AppHeader extends Vue {
             />
           </svg>
           <span class="hidden md:block ml-2 text-sm font-medium">Playlist</span>
+          <span
+            class="absolute top-0 left-0 w-auto h-auto p-[3px] font mt-2 ml-2 text-[12px] text-white font- bg-indigo-500 rounded-full"
+          >{{ controller.controller.store.playlist.list.length }}</span>
         </a>
       </div>
     </div>
