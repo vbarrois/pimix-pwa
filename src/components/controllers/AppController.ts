@@ -6,8 +6,8 @@ import AppHeader from '@/components/templates/AppHeader.vue'
 import AppMenu from '@/components/templates/AppMenu.vue'
 import AppFooter from '@/components/templates/AppFooter.vue'
 import { RouterController } from "@/components/controllers/RouterController"
-import { PimixStore } from "@/mixins/IPimix"
-import { eventBus } from "@/mixins/EventsManager"
+import { PimixStore } from "@/components/mixins/IPimix"
+import { eventBus } from "@/components/mixins/EventsManager"
 
 interface AppController {
   connected: boolean

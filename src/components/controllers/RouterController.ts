@@ -1,8 +1,8 @@
 import { io, Socket } from 'socket.io-client'
 import { inject } from 'vue'
 import _ from 'lodash'
-import { eventBus } from '@/mixins/EventsManager'
-import { PimixServer, PimixStore, PlayList, PlayListItem, Song } from '@/mixins//IPimix'
+import { eventBus } from '@/components/mixins/EventsManager'
+import { PimixServer, PimixStore, PlayList, PlayListItem, Song } from '@/components/mixins/IPimix'
 
 const subscribedMessage = [
   'serverlist',

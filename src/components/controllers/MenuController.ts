@@ -1,7 +1,7 @@
 import { computed, reactive, inject } from "vue"
 import _ from 'lodash'
 
-import { PimixStore } from "@/mixins/IPimix"
+import { PimixStore } from "@/components/mixins/IPimix"
 
 interface MenuController {
   store: PimixStore

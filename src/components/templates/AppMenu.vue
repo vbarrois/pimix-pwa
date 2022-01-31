@@ -1,7 +1,7 @@
 <script lang='ts'>
 import _ from 'lodash'
 import { Options, setup, Vue } from 'vue-class-component'
-import { eventBus } from '@/mixins/EventsManager'
+import { eventBus } from '@/components/mixins/EventsManager'
 import { reactive } from '@vue/reactivity'
 import { MenuController } from '@/components/controllers/MenuController'
 

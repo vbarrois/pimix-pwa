@@ -1,5 +1,5 @@
 import mitt, {Emitter} from "mitt"
-import { PimixServer, PlayList, PlayListItem } from "./IPimix"
+import { PimixServer, PlayList, PlayListItem } from "@/components/mixins/IPimix"
 
 export type PimixEvent = {
   router: { status: boolean, attachedPimixId?: string }

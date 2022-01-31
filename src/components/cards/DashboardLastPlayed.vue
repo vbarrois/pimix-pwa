@@ -1,6 +1,6 @@
 <script lang='ts'>
 import { Options, Vue, setup } from 'vue-class-component'
-import { DashboardController } from '@/mixins/DashboardController'
+import { DashboardController } from '@/components/controllers/DashboardController'
 import { Song } from '@/mixins/IPimix'
 import days from 'dayjs'
 import 'dayjs/locale/fr'
