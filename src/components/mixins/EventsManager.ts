@@ -3,8 +3,8 @@ import { PimixServer, PlayList, PlayListItem } from "@/components/mixins/IPimix"
 
 export type PimixEvent = {
   router: { status: boolean, attachedPimixId?: string }
-  playlist: { action: string, playlist?: PlayList, item?: PlayListItem }
   pimixserver: { list: PimixServer[] }
+  playlist: { action: string, playlist?: PlayList, item?: PlayListItem }
   header: { action: string, data?: any }
   container: { component: string }
 }

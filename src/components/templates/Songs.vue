@@ -1,8 +1,8 @@
 <script lang='ts'>
 import { Options, Vue, setup } from 'vue-class-component'
-import { SongsController } from '@/mixins/SongsController'
-import { Song } from '@/mixins/IPimix'
-import { eventBus } from '@/mixins/EventsManager'
+import { SongsController } from '@/components/controllers/SongsController'
+import { eventBus } from '@/components/mixins/EventsManager'
+import { Song } from '../mixins/IPimix'
 
 
 @Options({})

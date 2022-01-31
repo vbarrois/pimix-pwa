@@ -110,19 +110,19 @@ export class RouterController {
       })
       this.socket.on('disconnect', () => {
         // disconnected, unsubscribed all events
-        this.disconnect()
+        this.disconnect(false) // dont close socket for reconnection 
         eventBus.emit('router', { status: false })
         this.connected = false
-        this.socket.close()
       })
     }
   }
 
-  public disconnect () {
+  public disconnect (_closeSocket: boolean = false) {
     // lost connection, clean attached events (fix the hmr reload make the events duplicated)
     _.forEach(subscribedMessage, (message) => {
       this.socket.off(message)
     })
+    if (_closeSocket) this.socket.close()
   }
 
   public isConnected (): boolean {

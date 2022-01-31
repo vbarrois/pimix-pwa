@@ -1,8 +1,8 @@
 import { AxiosResponse } from 'axios'
 import _ from 'lodash'
 import { computed, reactive } from 'vue'
-import { request, REST_SERVER } from './REST'
-import { Song } from './IPimix'
+import { request, REST_SERVER } from '@/components/mixins/REST'
+import { Song } from '@/components/mixins/IPimix'
 
 interface SongListController {
   songs: Song[]
