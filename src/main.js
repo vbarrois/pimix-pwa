@@ -10,7 +10,12 @@ const store = reactive({
   playlist: {
     playlistUUID: '',
     list: []
-  }
+  },
+  votes: {
+    playlistUUID: '',
+    list: []
+  },
+  tracks: []
 })
 pimix.provide('Store', store)
 pimix.use(VueLazyLoad, {})

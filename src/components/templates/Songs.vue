@@ -3,18 +3,24 @@ import { Options, Vue, setup } from 'vue-class-component'
 import { SongsController } from '@/components/controllers/SongsController'
 import { eventBus } from '@/components/mixins/EventsManager'
 import { Song } from '../mixins/IPimix'
-
+import { shallowRef } from '@vue/reactivity'
+import { defineAsyncComponent } from '@vue/runtime-core'
 
 @Options({})
 export default class Songs extends Vue {
   controller = setup(() => SongsController())
+
+  SongCard = shallowRef(
+    defineAsyncComponent(() =>
+      import('@/components/templates/SongCard.vue')
+    )
+  )
 
   mounted () {
   }
 
   created() {
     this.controller.getList()
-    eventBus.emit('header', { action: 'ready' } )
   }
 
   getSong (_id: number): any {
@@ -32,13 +38,9 @@ export default class Songs extends Vue {
 </script>
 
 <template>
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
-    <div v-for="(song, index) in controller.controller.songs" :key="index" class="flex p-2">
-      <img v-lazy="getThumb(song.id)" class="w-12 h-12 md:w-20 md:h-20 rounded my-auto">
-      <div class="flex flex-col pl-2 pr-2 truncate">
-        <span class="text-left text-xl font-bold" @click="getSong(song.id)">{{ song.title }}</span>
-        <span class="text-left">{{ song.album }}</span>
-      </div>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-2 pr-2 bg-gray-400 bg-opacity-80">
+    <div v-for="(song, index) in controller.controller.songs" :key="index" class="flex truncate">
+      <component :is="SongCard" :song="song"></component>
     </div>
   </div>
 </template>

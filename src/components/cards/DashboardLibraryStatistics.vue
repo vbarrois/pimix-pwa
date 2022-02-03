@@ -1,9 +1,10 @@
 <script lang='ts'>
 import { Options, Vue, setup } from 'vue-class-component'
 import { DashboardController } from '@/components/controllers/DashboardController'
-import { Song } from '@/mixins/IPimix'
+import { Song } from '@/components/mixins/IPimix'
 import days from 'dayjs'
 import 'dayjs/locale/fr'
+import { eventBus } from '../mixins/EventsManager'
 
 @Options({})
 export default class DashboardLibraryStatistics extends Vue {
@@ -24,7 +25,7 @@ export default class DashboardLibraryStatistics extends Vue {
 </script>
 
 <template>
-  <div class="max-w w-full lg:max-w-full lg:flex">
+  <div class="max-w w-full lg:max-w-full lg:flex truncate">
     <div class="border border-gray-400 lg:border-gray-400 bg-white rounded-b rounded-md p-4 flex flex-col justify-between leading-normal w-full">
       <div class="mb-0">
         <div class="text-gray-900 font-bold text-xl mb-2">Statistiques</div>

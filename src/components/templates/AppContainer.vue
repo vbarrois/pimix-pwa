@@ -1,69 +1,72 @@
 <script lang='ts'>
+import _ from 'lodash'
 import { Options, Vue } from 'vue-class-component'
 import { eventBus } from '@/components/mixins/EventsManager'
 
-import { defineAsyncComponent } from '@vue/runtime-dom'
+import { defineAsyncComponent, markRaw } from '@vue/runtime-dom'
+import { Page } from '@/components/mixins/IPimix'
 
-const DashBoard = defineAsyncComponent(() =>
-  import('@/components/templates/Dashboard.vue')
-)
-
-const Songs = defineAsyncComponent(() =>
-  import('@/components/templates/Songs.vue')
-)
-
-const Artists = defineAsyncComponent(() =>
-  import('@/components/templates/Artists.vue')
-)
-
-const Genres = defineAsyncComponent(() =>
-  import('@/components/templates/Genres.vue')
-)
-
-const Settings = defineAsyncComponent(() =>
-  import('@/components/templates/Settings.vue')
-)
-
-const Player = defineAsyncComponent(() =>
-  import('@/components/templates/Player.vue')
-)
-
-const Playlist = defineAsyncComponent(() =>
-  import('@/components/templates/Playlist.vue')
-)
+const pages: Page[] = [
+  {
+    name: 'dashboard',
+    template: markRaw(defineAsyncComponent(() =>
+      import('@/components/templates/Dashboard.vue')
+    ))
+  },
+  {
+    name: 'songs',
+    template: markRaw(defineAsyncComponent(() =>
+      import('@/components/templates/Songs.vue')
+    ))
+  },
+  {
+    name: 'artists',
+    template: markRaw(defineAsyncComponent(() =>
+      import('@/components/templates/Artists.vue')
+    ))
+  },
+  {
+    name: 'genres',
+    template: markRaw(defineAsyncComponent(() =>
+      import('@/components/templates/Genres.vue')
+    ))
+  },
+  {
+    name: 'settings',
+    template: markRaw(defineAsyncComponent(() =>
+      import('@/components/templates/Settings.vue')
+    ))
+  },
+  {
+    name: 'IDCard',
+    template: markRaw(defineAsyncComponent(() =>
+      import('@/components/templates/IDCard.vue')
+    ))
+  },
+  {
+    name: 'playlist',
+    template: markRaw(defineAsyncComponent(() =>
+      import('@/components/templates/Playlist.vue')
+    ))
+  }
+]
 
 @Options({})
 export default class AppHeader extends Vue {
 
-  displayedComponent = DashBoard
+  displayedComponent: Page = pages[0]
 
   created () {
-    eventBus.on('container', (e: { component: string }) => {
-      console.log('load component', e.component)
-      switch (e.component) {
-        case 'dashboard':
-          this.displayedComponent = DashBoard
-          break
-        case 'songs':
-          this.displayedComponent = Songs
-          break
-        case 'artists':
-          this.displayedComponent = Artists
-          break
-        case 'genres':
-          this.displayedComponent = Genres
-          break
-        case 'settings':
-          this.displayedComponent = Settings
-          break
-        case 'player':
-          this.displayedComponent = Player
-          break
-        case 'playlist':
-          this.displayedComponent = Playlist
-          break
+    eventBus.on('container', (_event: { component: string, options?: any }) => {
+      console.log('load component', _event.component)
+      this.displayedComponent = {
+        ..._.filter(pages, (page: Page) => {
+          return page.name === _event.component
+        })[0],
+        ...{
+          params: _event.options
+        }
       }
-
     })
   }
 }
@@ -71,6 +74,6 @@ export default class AppHeader extends Vue {
 
 <template>
   <div class="container mx-auto">
-    <component :is="displayedComponent"></component>
+    <component :is="displayedComponent.template" :params="displayedComponent.params" class="my-4"></component>
   </div>
 </template>

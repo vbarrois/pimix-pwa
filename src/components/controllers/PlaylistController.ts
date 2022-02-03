@@ -3,13 +3,13 @@ import _ from 'lodash'
 
 import { PimixStore } from "@/components/mixins/IPimix"
 
-interface MenuController {
+interface PlaylistController {
   store: PimixStore
 }
 
-export const MenuController = () => {
+export const PlaylistController = () => {
 
-  const controller: MenuController = reactive({
+  const controller: PlaylistController = reactive({
     store: inject('Store') as PimixStore
   })
 

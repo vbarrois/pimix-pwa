@@ -61,14 +61,6 @@ export const SongsController = () => {
     controller.songs = await loadSongs()
   }
 
-  async function getSong (_id: number): Promise<Song> {
-    return await loadSong(_id)
-  }
-
-  async function getLast (_count: number): Promise<Song[]> {
-    return await getLastAdded(_count)
-  }
-
   const getThumb = (_id: number): string => {
     return `http://${REST_SERVER}/api/song/thumb/${_id}`
   }
@@ -80,9 +72,7 @@ export const SongsController = () => {
   return {
     controller,
     getList,
-    getSong,
     getCover,
-    getThumb,
-    getLast
+    getThumb
   }
 }

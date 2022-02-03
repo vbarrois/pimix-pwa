@@ -2,7 +2,7 @@ import { io, Socket } from 'socket.io-client'
 import { inject } from 'vue'
 import _ from 'lodash'
 import { eventBus } from '@/components/mixins/EventsManager'
-import { PimixServer, PimixStore, PlayList, PlayListItem, Song } from '@/components/mixins/IPimix'
+import { PimixServer, PimixStore, Player, PlayList, PlayListItem, Song, Vote } from '@/components/mixins/IPimix'
 
 const subscribedMessage = [
   'serverlist',
@@ -11,7 +11,10 @@ const subscribedMessage = [
   'playlist_index',
   'votes_init',
   'vote',
-  'attached'
+  'attached',
+  'track',
+  'mixer',
+  'message'
 ]
 
 export class RouterController {
@@ -36,32 +39,33 @@ export class RouterController {
   }
 
   private parseMessage(_message: string, _content) {
-    console.log(`message ${_message} received with content ${_content}`)
     switch (_message) {
       case 'serverlist': {
         this.pimixList = _.map(JSON.parse(_content), (server: PimixServer) => server)
         // check if attached pimix is in server list, else detach (pimix player shutdown)
         if (!_.isNil(this.attachedPimixId) && !_.includes(_.map(this.pimixList, 'id'), this.attachedPimixId)) {
           this.attachedPimixId = null
-          console.log('emit => pimix not found')
           eventBus.emit('router', { status: true, attachedPimixId: null })
         }
         // if not connected to pimix player, and one is available, automaticaly connect to first from list
         if (_.isNil(this.attachedPimixId) && this.pimixList.length > 0) {
-          console.log(`socket map to ${this.pimixList[0].id}`)
           this.socket.emit('map', this.pimixList[0].id)
         }
         eventBus.emit('pimixserver', { list: this.pimixList })
         break
       }
+      case 'mixer': {
+        console.log(`message ${_message} received with content ${_content}`)
+        const mixerState: PimixServer = JSON.parse(_content)
+        eventBus.emit('pimixserver', { current: mixerState })
+        break
+      }
       case 'attached': {
         this.attachedPimixId = (JSON.parse(_content) as PimixServer).id
-        console.log('emit => attached')
         eventBus.emit('router', { status: true, attachedPimixId: this.attachedPimixId })
         break
       }
       case 'detached': {
-        console.log('dettached from ' + _content)
         eventBus.emit('router', { status: true, attachedPimixId: null })
         this.attachedPimixId = null
         break
@@ -69,13 +73,39 @@ export class RouterController {
       case 'playlist_init': {
         const playlistInit: PlayList = JSON.parse(_content)
         eventBus.emit('playlist', { action: 'init', playlist: playlistInit })
+        break
       }
       case 'playlist_add': {
-        const newItem: PlayListItem = JSON.parse(_content)
+        const newItem: PlayListItem = JSON.parse(_content).item
         eventBus.emit('playlist', { action: 'add', item: newItem })
+        break
+      }
+      case 'votes_init': {
+        const votesInit: Vote[] = JSON.parse(_content)
+        eventBus.emit('vote', { action: 'init', votes: votesInit })
+        break
+      }
+      case 'vote': {
+        const newVote: Vote = JSON.parse(_content)
+        eventBus.emit('vote', { action: 'new', new: newVote })
+        break
+      }
+      case 'track': {
+        const playerState: Player = JSON.parse(_content)
+        eventBus.emit('player', { player: playerState })
+        break
+      }
+      case 'message': {
+        eventBus.emit('toast', _content)
+        break
       }
     }
-    console.log(this.pimixList)
+  }
+
+  public sendCommand (_command: string, _params?: string): void {
+    this.socket.emit('command', {
+      action: _command
+    })
   }
 
   public connect () {

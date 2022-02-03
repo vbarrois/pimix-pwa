@@ -1,6 +1,6 @@
 <script lang='ts'>
 import { Options, Vue, setup } from 'vue-class-component'
-import { eventBus } from '@/mixins/EventsManager'
+import { eventBus } from '@/components/mixins/EventsManager'
 
 @Options({})
 export default class Artists extends Vue {

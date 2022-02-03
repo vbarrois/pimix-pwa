@@ -7,7 +7,7 @@ import DashboardLibraryStatistics from '../cards/DashboardLibraryStatistics.vue'
 </script>
 
 <template>
-  <div class="grid grid-cols-1 xl:grid-cols-2 gap-2">
+  <div class="grid grid-cols-1 xl:grid-cols-2 gap-2 px-2">
     <DashboardLastAdded />
     <DashboardMostPlayed />
     <DashboardMostSwipped />

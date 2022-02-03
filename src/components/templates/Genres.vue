@@ -1,6 +1,5 @@
 <script lang='ts'>
-import { Options, Vue, setup } from 'vue-class-component'
-import { eventBus } from '@/mixins/EventsManager'
+import { Options, Vue } from 'vue-class-component'
 
 @Options({})
 export default class Genres extends Vue {

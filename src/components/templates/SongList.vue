@@ -1,7 +1,7 @@
 <script lang='ts'>
 import { defineComponent, defineProps, ref } from 'vue'
 import _ from 'lodash'
-import { request } from '../mixins/REST'
+import { request } from '@/components/mixins/REST'
 import { AxiosResponse } from "axios";
 
 export default defineComponent({
@@ -124,7 +124,7 @@ export default defineComponent({
 <template>
   <div>
     <h1 class="text-3xl font-bold">Liste des titres</h1>
-    <div v-if="isResultsAvailable" class="inline-flex mt-3 mb-5">
+    <div v-if="isResultsAvailable" class="inline-flex mt-3">
       <button
         :disabled="curpage == 0"
         class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l"
