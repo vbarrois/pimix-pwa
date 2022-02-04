@@ -14,7 +14,7 @@ export default class AppToaster extends Vue {
     })
   }
 
-  destroyed () {
+  unmounted () {
     eventBus.off('toast')
   }
 

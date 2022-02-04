@@ -25,7 +25,7 @@ export default class AppMenu extends Vue {
     })
   }
 
-  destroyed () {
+  unmounted () {
     eventBus.off('router')
   }
 

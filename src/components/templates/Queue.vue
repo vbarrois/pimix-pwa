@@ -3,7 +3,7 @@ import _ from 'lodash'
 import { Options, Vue, setup } from 'vue-class-component'
 import { PlaylistController } from '@/components/controllers/PlaylistController'
 import { defineAsyncComponent, shallowRef } from '@vue/runtime-core'
-import { Vote } from '../mixins/IPimix'
+import { Vote } from '@/components/mixins/IPimix'
 import days from 'dayjs'
 
 @Options({})
@@ -14,13 +14,13 @@ export default class Playlist extends Vue {
 
   SongCard = shallowRef(
     defineAsyncComponent(() =>
-      import('@/components/templates/SongCard.vue')
+      import('@/components/cards/SongCard.vue')
     )
   )
   
   VoteCard = shallowRef(
     defineAsyncComponent(() =>
-      import('@/components/templates/VoteCard.vue')
+      import('@/components/cards/VoteCard.vue')
     )
   )
 

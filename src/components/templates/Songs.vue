@@ -1,8 +1,6 @@
 <script lang='ts'>
 import { Options, Vue, setup } from 'vue-class-component'
 import { SongsController } from '@/components/controllers/SongsController'
-import { eventBus } from '@/components/mixins/EventsManager'
-import { Song } from '../mixins/IPimix'
 import { shallowRef } from '@vue/reactivity'
 import { defineAsyncComponent } from '@vue/runtime-core'
 
@@ -12,7 +10,7 @@ export default class Songs extends Vue {
 
   SongCard = shallowRef(
     defineAsyncComponent(() =>
-      import('@/components/templates/SongCard.vue')
+      import('@/components/cards/SongCard.vue')
     )
   )
 
@@ -21,13 +19,6 @@ export default class Songs extends Vue {
 
   created() {
     this.controller.getList()
-  }
-
-  getSong (_id: number): any {
-    this.controller.getSong(_id)
-      .then((result: Song) => {
-        return result
-      })
   }
 
   getThumb (_id: number): string {

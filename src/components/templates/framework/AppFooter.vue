@@ -1,12 +1,13 @@
 <script lang='ts'>
 import _ from 'lodash'
 import { Options, Vue, setup } from 'vue-class-component'
+import { eventBus } from '@/components/mixins/EventsManager'
+import { shallowRef } from '@vue/reactivity'
+import { defineAsyncComponent } from '@vue/runtime-core'
+
 import { PlayerController } from '@/components/controllers/PlayerController'
 import { formatSeconds } from '@/components/mixins/tools'
 import { Song, Track } from '@/components/mixins/IPimix'
-import { eventBus } from '../mixins/EventsManager'
-import { shallowRef } from '@vue/reactivity'
-import { defineAsyncComponent } from '@vue/runtime-core'
 
 @Options({
   props: {
@@ -129,7 +130,7 @@ export default class AppFooter extends Vue {
     animation: floatText 5s infinite alternate ease-in-out;
 }
 
-@-webkit-keyframes floatText{
+@keyframes floatText{
   from {
     left: -30%;
   }

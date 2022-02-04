@@ -1,5 +1,5 @@
 <script lang='ts'>
-import { Options, Vue, setup } from 'vue-class-component'
+import { Options, Vue } from 'vue-class-component'
 import { eventBus } from '@/components/mixins/EventsManager'
 
 @Options({})
@@ -7,9 +7,6 @@ export default class AppHeader extends Vue {
   // controller = setup(() => {})
 
   created () {
-    eventBus.on('header', (e: { action: string, data?: any }) => {
-      console.log('event received', e.action)
-    })
   }
 }
 </script>
