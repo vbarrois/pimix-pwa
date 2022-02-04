@@ -33,15 +33,15 @@ export const AppController = () => {
   })
 
   function init () {
-    // Manage in App Controller the playlist events
-    eventBus.on('playlist', (_event) => {
+    // Manage in App Controller the queue events
+    eventBus.on('queue', (_event) => {
       switch (_event.action) {
         case 'init': {
-          controller.store.playlist = _event.playlist
+          controller.store.queue = _event.queue
           break
         }
         case 'add': {
-          controller.store.playlist.list.push(_event.item)
+          controller.store.queue.list.push(_event.item)
           break
         }
       }
@@ -93,7 +93,7 @@ export const AppController = () => {
   }
 
   function leave () {
-    eventBus.off('playlist')
+    eventBus.off('queue')
     eventBus.off('vote')
   }
   

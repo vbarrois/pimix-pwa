@@ -5,6 +5,8 @@ import { PlayerController } from '@/components/controllers/PlayerController'
 import { formatSeconds } from '@/components/mixins/tools'
 import { Song, Track } from '@/components/mixins/IPimix'
 import { eventBus } from '../mixins/EventsManager'
+import { shallowRef } from '@vue/reactivity'
+import { defineAsyncComponent } from '@vue/runtime-core'
 
 @Options({
   props: {
@@ -14,6 +16,18 @@ import { eventBus } from '../mixins/EventsManager'
 export default class AppFooter extends Vue {
   playerContoller = setup(() => PlayerController())
   displaymode: string = 'reduced'
+
+  SongTools = shallowRef(
+    defineAsyncComponent(() =>
+      import('@/components/cards/SongTools.vue')
+    )
+  )
+
+  PlayerControl = shallowRef(
+    defineAsyncComponent(() =>
+      import('@/components/templates/PlayerControl.vue')
+    )
+  )
 
   mounted () {
     eventBus.on('interface', (_event) => {
@@ -30,27 +44,19 @@ export default class AppFooter extends Vue {
   }
 
   currentTrack (): Track {
-    const activetrackid: number = this.playerContoller.store.server?.activetrack
-    const activetrack: Track = this.playerContoller.store.tracks[activetrackid-1]
-    return activetrack
+    return this.playerContoller.controller.activeTrack
   }
 
   currentSong (): Song {
-    if (!_.isNil(this.currentTrack())) {
-      return this.currentTrack().item.song
-    } 
+    return this.playerContoller.controller.activeSong
   }
 
   elapsedTime (): string {
-    if (!_.isNil(this.currentTrack())) {
-      return formatSeconds(this.currentTrack().elapsed)
-    } 
+    return formatSeconds(this.playerContoller.controller.elapsed)
   }
 
   totalTime (): string {
-    if (!_.isNil(this.currentSong())) {
-      return formatSeconds(this.currentSong().duration)
-    } 
+    return formatSeconds(this.playerContoller.controller.duration)
   }
 
   playingSongCover () {
@@ -62,6 +68,10 @@ export default class AppFooter extends Vue {
         return url
       }
     }
+  }
+
+  progress (_track: Track) {
+    return 100 * _track?.elapsed / _track?.item.song.duration
   }
 
   get isReduced (): boolean {
@@ -92,6 +102,41 @@ export default class AppFooter extends Vue {
         </div>
       </div>
     </div>
-    <component :is="playerContoller.PlayerControl"></component>
+    <div class="relative w-full bg-gray-200 h-1.5">
+      <div class="absolute bg-blue-800 h-1.5 w-full"></div>
+      <div class="absolute bg-white h-1.5" :style="`width: ${playerContoller.controller?.progressbar?.end}%`"></div>
+      <div class="absolute bg-green-600 h-1.5" :style="`width: ${playerContoller.controller?.progressbar?.position}%`"></div>
+      <div class="absolute bg-blue-800 h-1.5" :style="`width: ${playerContoller.controller?.progressbar?.start}%`"></div>
+    </div>
+    <component
+      :is="SongTools"
+      v-if="!isReduced" 
+      :params="currentTrack()?.item"
+      :toolbar="true"
+      class="w-full text-white bg-gray-800">
+    </component>
+
+    <component
+      :is="PlayerControl"
+      class="bg-gray-800"></component>
   </div>
 </template>
+
+<style scoped>
+.movetext div {
+    position: absolute;
+    white-space: nowrap;
+    animation: floatText 5s infinite alternate ease-in-out;
+}
+
+@-webkit-keyframes floatText{
+  from {
+    left: -30%;
+  }
+
+  to {
+    /* left: auto; */
+    left: 80%;
+  }
+}
+</style>

@@ -5,7 +5,7 @@ export class Page {
 
 export class PimixStore {
   connected: boolean
-  playlist: PlayList
+  queue: Queue
   votes: Vote[]
   servers: PimixServer[]
   server: PimixServer
@@ -86,7 +86,7 @@ export interface PimixServer {
   nbclient: number
 }
 
-export interface PlayListItem {
+export interface QueueItem {
   uuid: string
   createdAt: string
   executed?: boolean
@@ -95,9 +95,9 @@ export interface PlayListItem {
   song?: Song
 }
 
-export interface PlayList {
+export interface Queue {
   playingUUID: string,
-  list: PlayListItem[]
+  list: QueueItem[]
 }
 
 // same as playlist item for now !?
@@ -130,4 +130,11 @@ export interface Track {
     state: string
     skipped: number
   }
+}
+
+export interface Playlist {
+  id: number
+  name: string
+  public: number
+  userid: number
 }

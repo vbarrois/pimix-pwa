@@ -10,7 +10,7 @@ import days from 'dayjs'
 export default class Playlist extends Vue {
   controller = setup(() => PlaylistController())
 
-  maxDisplayedPlaylistSongs: number = 20 // limit playlist history length for performance 
+  maxDisplayedQueuesSongs: number = 20 // limit playlist history length for performance 
 
   SongCard = shallowRef(
     defineAsyncComponent(() =>
@@ -38,9 +38,9 @@ export default class Playlist extends Vue {
 
 <template>
   <div class="flex flex-col w-full">
-    <div class="text-center"><span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-xs font-light text-gray-700 mb-2">{{ controller.store.playlist.playingUUID }}</span></div>
+    <div class="text-center"><span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-xs font-light text-gray-700 mb-2">{{ controller.store.queue.playingUUID }}</span></div>
     <div class="text-center pt-1">
-      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-xs font-light text-gray-700 mr-2 mb-2">{{ controller.store.playlist.list.length }} Played</span>
+      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-xs font-light text-gray-700 mr-2 mb-2">{{ controller.store.queue.list.length }} Played</span>
       <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-xs font-light text-gray-700 mr-2 mb-2">{{ controller.store.votes.length }} Voted</span>
     </div>
     <div
@@ -56,7 +56,7 @@ export default class Playlist extends Vue {
     </div>
     <div class="border border-yellow-400"></div>
     <div 
-      v-for="(playlistItem, index) in controller.store.playlist.list.slice(controller.store.playlist.list.length - maxDisplayedPlaylistSongs, controller.store.playlist.list.length).reverse()" 
+      v-for="(playlistItem, index) in controller.store.queue.list.slice(controller.store.queue.list.length - maxDisplayedQueuesSongs, controller.store.queue.list.length).reverse()" 
       :key="`playlistitem-${index}`"
       class="grid grid-cols-1 gap-2 bg-gray-900 text-white bg-opacity-80"
     >

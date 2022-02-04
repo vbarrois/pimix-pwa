@@ -7,7 +7,7 @@ import "./css/index.css"
 const pimix = createApp(App)
 
 const store = reactive({
-  playlist: {
+  queue: {
     playlistUUID: '',
     list: []
   },
@@ -17,6 +17,7 @@ const store = reactive({
   },
   tracks: []
 })
+
 pimix.provide('Store', store)
 pimix.use(VueLazyLoad, {})
 pimix.mount("#pimix")

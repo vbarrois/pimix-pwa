@@ -3,10 +3,19 @@ import _ from 'lodash'
 import { Options, Vue, setup } from 'vue-class-component'
 import { AppController } from '@/components/controllers/AppController'
 import { Song } from './components/mixins/IPimix'
+import { shallowRef } from '@vue/reactivity'
+import { defineAsyncComponent } from '@vue/runtime-core'
 
 @Options({})
 export default class App extends Vue {
   appController = setup(() => AppController())
+
+  PlaylistModal = shallowRef(
+    defineAsyncComponent(() =>
+      import('@/components/templates/ModalPlaylists.vue')
+    )
+  )
+
 
   mounted() {
     this.appController.connect()
@@ -54,6 +63,10 @@ export default class App extends Vue {
 </script>
 
 <template>
+
+  <component
+    :is="PlaylistModal"
+  ></component>
   <main v-lazy:background-image="playingSongCover()" class="flex flex-col h-screen bg-cover">
     <component
       :is="appController.AppToaster"

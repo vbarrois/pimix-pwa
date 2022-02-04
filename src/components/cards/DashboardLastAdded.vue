@@ -40,7 +40,7 @@ export default class DashboardLastAdded extends Vue {
     </div>
     <div class="truncate w-full bg-white bg-opacity-80 p-4">
       <div class="text-gray-900 font-bold text-xl mb-2">Les derniers ajoutés</div>
-      <div v-for="song in controller.controller.lastadded" :key="song.id" class="truncate" @click="gotoSong(song)">
+      <div v-for="song in controller.controller.lastadded" :key="song.id" class="truncate" role="button" @click="gotoSong(song)">
         <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{{ formatDate(song.createdAt) }}</span>
         {{ song.title }}
       </div>

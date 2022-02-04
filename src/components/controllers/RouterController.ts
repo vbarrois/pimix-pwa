@@ -2,7 +2,7 @@ import { io, Socket } from 'socket.io-client'
 import { inject } from 'vue'
 import _ from 'lodash'
 import { eventBus } from '@/components/mixins/EventsManager'
-import { PimixServer, PimixStore, Player, PlayList, PlayListItem, Song, Vote } from '@/components/mixins/IPimix'
+import { PimixServer, PimixStore, Player, Queue, QueueItem, Song, Vote } from '@/components/mixins/IPimix'
 
 const subscribedMessage = [
   'serverlist',
@@ -71,13 +71,13 @@ export class RouterController {
         break
       }
       case 'playlist_init': {
-        const playlistInit: PlayList = JSON.parse(_content)
-        eventBus.emit('playlist', { action: 'init', playlist: playlistInit })
+        const queuetInit: Queue = JSON.parse(_content)
+        eventBus.emit('queue', { action: 'init', queue: queuetInit })
         break
       }
       case 'playlist_add': {
-        const newItem: PlayListItem = JSON.parse(_content).item
-        eventBus.emit('playlist', { action: 'add', item: newItem })
+        const newItem: QueueItem = JSON.parse(_content).item
+        eventBus.emit('queue', { action: 'add', item: newItem })
         break
       }
       case 'votes_init': {

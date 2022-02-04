@@ -46,7 +46,7 @@ const pages: Page[] = [
   {
     name: 'playlist',
     template: markRaw(defineAsyncComponent(() =>
-      import('@/components/templates/Playlist.vue')
+      import('@/components/templates/Queue.vue')
     ))
   }
 ]
@@ -68,6 +68,9 @@ export default class AppHeader extends Vue {
         }
       }
     })
+  }
+
+  mounted () {
   }
 }
 </script>

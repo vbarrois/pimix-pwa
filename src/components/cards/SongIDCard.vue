@@ -1,22 +1,27 @@
 <script lang='ts'>
 import _ from 'lodash'
 import { Options, Vue, setup } from 'vue-class-component'
-import { Song } from '@/components/mixins/IPimix'
-import { formatDate, formatSeconds } from '@/components/mixins/tools'
-import { REST_SERVER } from '../mixins/REST'
 import { SongController } from '../controllers/SongController'
+import { shallowRef } from '@vue/reactivity'
+import { defineAsyncComponent } from '@vue/runtime-core'
 
 @Options({
   props: {
     params: Object
   }
 })
-export default class Player extends Vue {
+export default class SongIDCard extends Vue {
   controller = setup(() => SongController())
   params: any
 
+  SongTools = shallowRef(
+    defineAsyncComponent(() =>
+      import('@/components/cards/SongTools.vue')
+    )
+  )
+
   mounted () {
-    this.controller.loadInfos(this.params.song.id)
+    this.controller.loadInfos(this.params?.song.id)
   }
 
   created() {
@@ -33,6 +38,12 @@ export default class Player extends Vue {
       <img
         v-lazy="controller.getCover(params.song.id)"
         class="mx-auto h-[300px] lg:h-38 w-auto rounded-3xl border-4 border-white" />
+      <component
+        :is="SongTools"
+        :params="params"
+        :toolbar="false"
+        class="my-3 bg-opacity-80">
+      </component>
     </div>
     <div class="flex-auto bg-white">
       <div class="flex flex-col">

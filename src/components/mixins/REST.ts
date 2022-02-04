@@ -9,3 +9,19 @@ export const request = (
 ): Promise<AxiosResponse> => {
   return axios.get(`http://${REST_SERVER}/${_url}`, _options);
 }
+
+export const post = (
+  _url: string,
+  _data: any,
+  _options?: any
+): Promise<AxiosResponse> => {
+  return axios.post(`http://${REST_SERVER}/${_url}`, _data, _options);
+}
+
+export const put = (
+  _url: string,
+  _data: any,
+  _options?: any
+): Promise<AxiosResponse> => {
+  return axios.put(`http://${REST_SERVER}/${_url}`, _data, _options);
+}

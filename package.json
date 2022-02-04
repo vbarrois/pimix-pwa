@@ -12,6 +12,8 @@
   },
   "dependencies": {
     "@babel/plugin-proposal-decorators": "^7.16.7",
+    "@headlessui/vue": "^1.4.3",
+    "@heroicons/vue": "^1.0.5",
     "axios": "^0.25.0",
     "dayjs": "^1.10.7",
     "lodash": "^4.17.21",
