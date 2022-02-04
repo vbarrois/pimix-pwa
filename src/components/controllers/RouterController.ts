@@ -96,7 +96,7 @@ export class RouterController {
         break
       }
       case 'message': {
-        eventBus.emit('toast', _content)
+        eventBus.emit('toast', JSON.parse(_content))
         break
       }
     }

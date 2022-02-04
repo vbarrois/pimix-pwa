@@ -44,7 +44,7 @@ const pages: Page[] = [
     ))
   },
   {
-    name: 'playlist',
+    name: 'queue',
     template: markRaw(defineAsyncComponent(() =>
       import('@/components/templates/Queue.vue')
     ))

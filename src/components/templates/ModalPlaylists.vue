@@ -1,13 +1,14 @@
 <script lang='ts'>
 import { Options, setup, Vue } from 'vue-class-component'
+import _ from 'lodash'
 
 import { PlaylistController } from '@/components/controllers/PlaylistController'
 
 import { eventBus } from '@/components/mixins/EventsManager'
-import { Song } from '@/components/mixins/IPimix'
+import { DBError, DBResponse, Playlist, Song } from '@/components/mixins/IPimix'
 
-import { DocumentAddIcon } from '@heroicons/vue/solid'
-import { ViewListIcon } from '@heroicons/vue/outline'
+import { DocumentAddIcon, BadgeCheckIcon as BadgeCheckIconSolid } from '@heroicons/vue/solid'
+import { ViewListIcon, TrashIcon, BadgeCheckIcon as BadgeCheckIconOutline } from '@heroicons/vue/outline'
 
 import {
   TransitionRoot,
@@ -18,14 +19,14 @@ import {
 } from '@headlessui/vue'
 
 @Options({
-  components: { DocumentAddIcon, ViewListIcon, TransitionRoot, TransitionChild, Dialog, DialogOverlay, DialogTitle }
+  components: { DocumentAddIcon, ViewListIcon, TrashIcon, BadgeCheckIconSolid, BadgeCheckIconOutline, TransitionRoot, TransitionChild, Dialog, DialogOverlay, DialogTitle }
 })
 export default class ModalPlaylists extends Vue {
   modalController = setup(() => PlaylistController())
 
   song: Song
   editNewPlaylist: boolean = false
-  newPlaylistName: string
+  newPlaylistName: string = ''
 
   mounted () {
     this.modalController.getList() // load playlits
@@ -51,6 +52,47 @@ export default class ModalPlaylists extends Vue {
 
   createPlaylist (): void {
     this.modalController.createPlaylist(this.newPlaylistName, 1) // TODO set userid
+      .then((result: DBResponse) => {
+        if (result.success) {
+          eventBus.emit('toast', { message: 'playlist.create.success', severity: 1 })
+          this.modalController.getList()
+        } else {
+          _.forEach(result.errors, (error: DBError) => {
+            eventBus.emit('toast', { message: error.message, severity: 4 })
+          })
+        }
+      })
+      .catch(() => {
+        eventBus.emit('toast', { message: 'playlist.create.error', severity: 8 })
+      }) 
+  }
+
+  deletePlaylist (_playlistId: number): void {
+    this.modalController.deletePlaylist(_playlistId)
+  }
+
+  setSongToPlaylist (_playlist: Playlist, _state: boolean): void {
+    const promises: Promise<DBResponse>[] = []
+    if (_state) {
+      promises.push(this.modalController.addSongToPlaylist(_playlist.id, this.song?.id))
+    } else {
+      promises.push(this.modalController.removeSongFromPlaylist(_playlist.id, this.song?.id))
+    }
+
+    Promise.all(promises)
+      .then((results: DBResponse[]) => {
+        this.modalController.getList()
+        eventBus.emit('toast', { message: 'playlist.updated.success', severity: 1 })
+      })
+      .catch(() => {
+        eventBus.emit('toast', { message: 'playlist.update.error', severity: 8 })
+      })
+  }
+
+  isSongInPlaylist(_playlist: Playlist): boolean {
+    return _.includes(_.map(_playlist.PlaylistSongs, (item: { songid: number }) => {
+      return item.songid
+    }), this.song?.id )
   }
 
   created() {
@@ -89,7 +131,7 @@ export default class ModalPlaylists extends Vue {
             leave-to="opacity-0 scale-95"
           >
             <div
-              class="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl"
+              class="inline-flex flex-col w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl border-2 border-gray-700"
             >
               <DialogTitle
                 as="h3"
@@ -109,18 +151,20 @@ export default class ModalPlaylists extends Vue {
                   </div>
                   </form>
                 </div>
-                <div v-for="(playlist, index) in modalController.playlists" :key="`playlist-${index}`" class="flex">
-                  <ViewListIcon class="h-5 w-5 mr-2"/>{{ playlist.name }}
+                <div v-for="(playlist, index) in modalController.playlists" :key="`playlist-${index}`" class="flex" :class="isSongInPlaylist(playlist) ? 'font-bold text-green-500' : 'text-black'">
+                  <BadgeCheckIconSolid v-if="isSongInPlaylist(playlist)" class="h-5 w-5 mr-2 text-green-500"/>
+                  <BadgeCheckIconOutline v-else class="h-5 w-5 mr-2"/>
+                  <span @click="setSongToPlaylist(playlist, !isSongInPlaylist(playlist))">{{ playlist.name }} ({{ playlist.PlaylistSongs.length }})</span>
                 </div>
               </div>
 
-              <div class="mt-4">
+              <div class="mt-4 ml-auto">
                 <button
                   type="button"
                   class="inline-flex justify-center px-4 py-2 text-sm font-medium text-blue-900 bg-blue-100 border border-transparent rounded-md hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
                   @click="closeModal"
                 >
-                  Got it, thanks!
+                  Fermer
                 </button>
               </div>
             </div>

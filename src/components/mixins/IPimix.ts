@@ -1,3 +1,15 @@
+export class DBError {
+  path: string // field name
+  key: string // function check name
+  message: string // error message
+}
+
+export class DBResponse {
+  success: boolean
+  object: any
+  errors: DBError[]
+}
+
 export class Page {
   name: string
   template: any
@@ -136,5 +148,14 @@ export interface Playlist {
   id: number
   name: string
   public: number
-  userid: number
+  userid: number,
+  PlaylistSongs: { songid: number }[]
+}
+
+export interface PlaylistSong {
+  id: number
+  playlistid: number
+  songid: number
+  createdAt: string
+  updatedAt: string
 }

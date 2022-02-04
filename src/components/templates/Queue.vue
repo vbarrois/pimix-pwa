@@ -5,7 +5,6 @@ import { PlaylistController } from '@/components/controllers/PlaylistController'
 
 import SongCard from '@/components/cards/SongCard.vue'
 import VoteCard from '@/components/cards/VoteCard.vue'
-import { Vote } from '../mixins/IPimix'
 
 @Options({
   components: { SongCard, VoteCard }
@@ -25,7 +24,7 @@ export default class Playlist extends Vue {
       <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-xs font-light text-gray-700 mr-2 mb-2">{{ controller.votes.length }} Voted</span>
     </div>
     <div
-      v-for="(vote, index) in sortedVotes()"
+      v-for="(vote, index) in controller.votes"
       :key="`vote-${index}`"
       class="grid grid-cols-1 gap-2 bg-white text-black bg-opacity-80"
     >
@@ -33,11 +32,11 @@ export default class Playlist extends Vue {
     </div>
     <div class="border border-yellow-400"></div>
     <div 
-      v-for="(playlistItem, index) in controller.queue.list.slice(controller.queue.list.length - maxDisplayedQueuesSongs, controller.queue.list.length).reverse()" 
+      v-for="(queueItem, index) in controller.queue.list.slice(controller.queue.list.length - maxDisplayedQueuesSongs, controller.queue.list.length).reverse()" 
       :key="`playlistitem-${index}`"
       class="grid grid-cols-1 gap-2 bg-gray-900 text-white bg-opacity-80"
     >
-      <SongCard :song="playlistItem.song"/>
+      <SongCard :song="queueItem.song"/>
     </div>
   </div>
 </template>

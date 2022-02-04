@@ -7,7 +7,7 @@ export const request = (
   _url: string,
   _options?: any
 ): Promise<AxiosResponse> => {
-  return axios.get(`http://${REST_SERVER}/${_url}`, _options);
+  return axios.get(`http://${REST_SERVER}/${_url}`, _options)
 }
 
 export const post = (
@@ -15,7 +15,7 @@ export const post = (
   _data: any,
   _options?: any
 ): Promise<AxiosResponse> => {
-  return axios.post(`http://${REST_SERVER}/${_url}`, _data, _options);
+  return axios.post(`http://${REST_SERVER}/${_url}`, _data, _options)
 }
 
 export const put = (
@@ -23,5 +23,14 @@ export const put = (
   _data: any,
   _options?: any
 ): Promise<AxiosResponse> => {
-  return axios.put(`http://${REST_SERVER}/${_url}`, _data, _options);
+  return axios.put(`http://${REST_SERVER}/${_url}`, _data, _options)
+}
+
+export const remove = (
+  _url: string,
+  _data: any
+): Promise<AxiosResponse> => {
+  return axios.delete(`http://${REST_SERVER}/${_url}`, {
+    data: _data
+  })
 }
