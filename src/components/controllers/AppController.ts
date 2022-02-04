@@ -1,11 +1,5 @@
-import { computed, reactive, inject } from "vue"
+import { reactive, inject } from "vue"
 import _ from 'lodash'
-
-import AppContainer from '@/components/templates/framework/AppContainer.vue'
-import AppHeader from '@/components/templates/framework/AppHeader.vue'
-import AppMenu from '@/components/templates/framework/AppMenu.vue'
-import AppFooter from '@/components/templates/framework/AppFooter.vue'
-import AppToaster from '@/components/templates/framework/AppToaster.vue'
 
 import { RouterController } from "@/components/controllers/RouterController"
 import { PimixStore, Vote } from "@/components/mixins/IPimix"
@@ -92,9 +86,12 @@ export const AppController = () => {
     })
   }
 
-  function leave () {
+  function quit () {
     eventBus.off('queue')
     eventBus.off('vote')
+    eventBus.off('player')
+    eventBus.off('pimixserver')
+    eventBus.off('send')
   }
   
 
@@ -114,12 +111,8 @@ export const AppController = () => {
     controller,
     connect,
     init,
+    quit,
     disconnect,
-    getCover,
-    AppContainer,
-    AppHeader,
-    AppMenu,
-    AppFooter,
-    AppToaster
+    getCover
   }
 }

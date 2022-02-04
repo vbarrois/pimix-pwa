@@ -1,6 +1,5 @@
 <script lang='ts'>
 import { Options, Vue } from 'vue-class-component'
-import { RouterController } from '../controllers/RouterController'
 import { eventBus } from '../mixins/EventsManager'
 
 @Options({})

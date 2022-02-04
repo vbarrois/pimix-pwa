@@ -1,37 +1,28 @@
 <script lang='ts'>
 import { Options, Vue, setup } from 'vue-class-component'
 import { SongsController } from '@/components/controllers/SongsController'
-import { shallowRef } from '@vue/reactivity'
-import { defineAsyncComponent } from '@vue/runtime-core'
 
-@Options({})
+import SongCard from '@/components/cards/SongCard.vue'
+
+@Options({
+  components: { SongCard }
+})
 export default class Songs extends Vue {
-  controller = setup(() => SongsController())
-
-  SongCard = shallowRef(
-    defineAsyncComponent(() =>
-      import('@/components/cards/SongCard.vue')
-    )
-  )
+  songsController = setup(() => SongsController())
 
   mounted () {
   }
 
   created() {
-    this.controller.getList()
-  }
-
-  getThumb (_id: number): string {
-    const url: string = this.controller.getThumb(_id)
-    return url
+    this.songsController.getList()
   }
 }
 </script>
 
 <template>
   <div class="grid grid-cols-1 md:grid-cols-2 gap-2 pr-2 bg-gray-400 bg-opacity-80">
-    <div v-for="(song, index) in controller.controller.songs" :key="index" class="flex truncate">
-      <component :is="SongCard" :song="song"></component>
+    <div v-for="(song, index) in songsController.songs" :key="index" class="flex truncate">
+      <SongCard :song="song"/>
     </div>
   </div>
 </template>

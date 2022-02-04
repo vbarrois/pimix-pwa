@@ -1,37 +1,29 @@
 <script lang='ts'>
-import { Options, Vue, setup } from 'vue-class-component'
-import { shallowRef } from '@vue/reactivity'
-import { defineAsyncComponent } from '@vue/runtime-core'
+import { Options, Vue } from 'vue-class-component'
+import SongIDCard from '@/components/cards/SongIDCard.vue'
 
 @Options({
   props: {
     params: Object
-  }
+  },
+  components: { SongIDCard }
 })
 export default class Player extends Vue {
   params: any
-
-  SongIDCard = shallowRef(
-    defineAsyncComponent(() =>
-      import('@/components/cards/SongIDCard.vue')
-    )
-  )
 
   mounted () {
   }
 
   created() {
-    console.log('created', this.params)
+    console.log('song ID card created', this.params?.song)
   }
 }
 </script>
 
 <template>
   <div class="text-white">
-    <component
-      :is="SongIDCard"
+    <SongIDCard
       :params="params"
-      class="bg-opacity-80">
-    </component>
+      class="bg-opacity-80"/>
   </div>
  </template>

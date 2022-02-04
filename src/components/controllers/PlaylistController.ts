@@ -1,20 +1,12 @@
 import { computed, reactive, inject } from "vue"
 import _ from 'lodash'
-import { PimixStore, Playlist } from "@/components/mixins/IPimix"
+import { PimixStore, Playlist, Vote } from "@/components/mixins/IPimix"
 import { AxiosResponse } from "axios"
 import { put, request } from "@/components/mixins/REST"
 
-import {
-  TransitionRoot,
-  TransitionChild,
-  Dialog,
-  DialogOverlay,
-  DialogTitle,
-} from '@headlessui/vue'
-
 interface PlaylistController {
   store: PimixStore,
-  show: boolean,
+  isModalDisplayed: boolean,
   playlists: Playlist[]
 }
 
@@ -52,7 +44,7 @@ export const PlaylistController = () => {
 
   const controller: PlaylistController = reactive({
     store: inject('Store') as PimixStore,
-    show: false,
+    isModalDisplayed: false,
     playlists: []
   })
 
@@ -64,15 +56,25 @@ export const PlaylistController = () => {
     await savePlaylist(_name, _userid)
     await getList()
   }
+
+  async function setState (_modalState: boolean) {
+    controller.isModalDisplayed = _modalState
+  }
+
   return {
-    store: controller.store,
-    controller,
+    votes: computed(() => { 
+      return _.orderBy(controller.store.votes, [
+        (vote: Vote) => { return vote.points },
+        (vote: Vote) => { return vote.createdAt }
+      ], [
+        'asc', 'desc'
+      ])
+    }),
+    queue: computed(() => controller.store.queue),
+    playlists: computed(() => { return controller.playlists }),
+    setState,
     getList,
     createPlaylist,
-    TransitionChild,
-    TransitionRoot,
-    Dialog,
-    DialogOverlay,
-    DialogTitle
+    isModalDisplayed: computed(() => controller.isModalDisplayed)
   }
 }

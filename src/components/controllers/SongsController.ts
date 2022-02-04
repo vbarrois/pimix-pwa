@@ -42,7 +42,7 @@ export const SongsController = () => {
   }
   
   return {
-    controller,
+    songs: computed(() => controller.songs),
     getList,
     getCover,
     getThumb

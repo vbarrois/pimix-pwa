@@ -2,69 +2,42 @@
 import _ from 'lodash'
 import { Options, Vue, setup } from 'vue-class-component'
 import { PlaylistController } from '@/components/controllers/PlaylistController'
-import { defineAsyncComponent, shallowRef } from '@vue/runtime-core'
-import { Vote } from '@/components/mixins/IPimix'
-import days from 'dayjs'
 
-@Options({})
+import SongCard from '@/components/cards/SongCard.vue'
+import VoteCard from '@/components/cards/VoteCard.vue'
+import { Vote } from '../mixins/IPimix'
+
+@Options({
+  components: { SongCard, VoteCard }
+})
 export default class Playlist extends Vue {
   controller = setup(() => PlaylistController())
 
   maxDisplayedQueuesSongs: number = 20 // limit playlist history length for performance 
-
-  SongCard = shallowRef(
-    defineAsyncComponent(() =>
-      import('@/components/cards/SongCard.vue')
-    )
-  )
-  
-  VoteCard = shallowRef(
-    defineAsyncComponent(() =>
-      import('@/components/cards/VoteCard.vue')
-    )
-  )
-
-  sortedVotes () {
-    return _.orderBy(this.controller.store.votes, [
-      (vote) => { return vote.points },
-      (vote) => { return vote.createdAt }
-    ], [
-      'asc', 'desc'
-    ])
-  }
-  
 }
 </script>
 
 <template>
   <div class="flex flex-col w-full">
-    <div class="text-center"><span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-xs font-light text-gray-700 mb-2">{{ controller.store.queue.playingUUID }}</span></div>
+    <div class="text-center"><span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-xs font-light text-gray-700 mb-2">{{ controller.queue.playingUUID }}</span></div>
     <div class="text-center pt-1">
-      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-xs font-light text-gray-700 mr-2 mb-2">{{ controller.store.queue.list.length }} Played</span>
-      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-xs font-light text-gray-700 mr-2 mb-2">{{ controller.store.votes.length }} Voted</span>
+      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-xs font-light text-gray-700 mr-2 mb-2">{{ controller.queue.list.length }} Played</span>
+      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-xs font-light text-gray-700 mr-2 mb-2">{{ controller.votes.length }} Voted</span>
     </div>
     <div
       v-for="(vote, index) in sortedVotes()"
       :key="`vote-${index}`"
       class="grid grid-cols-1 gap-2 bg-white text-black bg-opacity-80"
     >
-      <component
-        :is="VoteCard"
-        :vote="vote"
-      >
-      </component>
+      <VoteCard :vote="vote"/>
     </div>
     <div class="border border-yellow-400"></div>
     <div 
-      v-for="(playlistItem, index) in controller.store.queue.list.slice(controller.store.queue.list.length - maxDisplayedQueuesSongs, controller.store.queue.list.length).reverse()" 
+      v-for="(playlistItem, index) in controller.queue.list.slice(controller.queue.list.length - maxDisplayedQueuesSongs, controller.queue.list.length).reverse()" 
       :key="`playlistitem-${index}`"
       class="grid grid-cols-1 gap-2 bg-gray-900 text-white bg-opacity-80"
     >
-      <component
-        :is="SongCard"
-        :song="playlistItem.song"
-      >
-      </component>
+      <SongCard :song="playlistItem.song"/>
     </div>
   </div>
 </template>

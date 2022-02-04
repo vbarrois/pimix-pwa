@@ -26,7 +26,7 @@ export const ToasterController = () => {
   }
 
   return {
-    toasts: controller.toasts,
+    toasts: computed(() => controller.toasts),
     push
   }
 }

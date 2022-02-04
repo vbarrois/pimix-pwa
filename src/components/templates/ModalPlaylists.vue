@@ -1,14 +1,24 @@
 <script lang='ts'>
 import { Options, setup, Vue } from 'vue-class-component'
-import { PlaylistController } from '../controllers/PlaylistController'
-import { eventBus } from '../mixins/EventsManager'
-import { Song } from '../mixins/IPimix'
+
+import { PlaylistController } from '@/components/controllers/PlaylistController'
+
+import { eventBus } from '@/components/mixins/EventsManager'
+import { Song } from '@/components/mixins/IPimix'
+
 import { DocumentAddIcon } from '@heroicons/vue/solid'
 import { ViewListIcon } from '@heroicons/vue/outline'
-import { reactive, ref } from '@vue/reactivity'
+
+import {
+  TransitionRoot,
+  TransitionChild,
+  Dialog,
+  DialogOverlay,
+  DialogTitle,
+} from '@headlessui/vue'
 
 @Options({
-  components: { DocumentAddIcon, ViewListIcon }
+  components: { DocumentAddIcon, ViewListIcon, TransitionRoot, TransitionChild, Dialog, DialogOverlay, DialogTitle }
 })
 export default class ModalPlaylists extends Vue {
   modalController = setup(() => PlaylistController())
@@ -18,7 +28,6 @@ export default class ModalPlaylists extends Vue {
   newPlaylistName: string
 
   mounted () {
-    this.modalController.controller.show = false
     this.modalController.getList() // load playlits
 
     eventBus.on('interface', (_event) => {
@@ -26,7 +35,7 @@ export default class ModalPlaylists extends Vue {
         case 'playlistmodal':
           this.editNewPlaylist = false
           this.song = _event.params.song as Song
-          this.modalController.controller.show = _event.params.show
+          this.modalController.setState(_event.params.show)
         break
       }
     })
@@ -37,7 +46,7 @@ export default class ModalPlaylists extends Vue {
   }
 
   closeModal (): void {
-    this.modalController.controller.show = false
+    this.modalController.setState(false)
   }
 
   createPlaylist (): void {
@@ -50,12 +59,11 @@ export default class ModalPlaylists extends Vue {
 </script>
 
 <template>
-  <component :is="modalController.TransitionRoot"  appear :show="modalController.controller.show" as="template">
-    <component :is="modalController.Dialog" as="div" @close="closeModal">
+  <TransitionRoot  appear :show="modalController.isModalDisplayed" as="template">
+    <Dialog as="div" @close="closeModal">
       <div class="fixed inset-0 z-10 overflow-y-auto">
         <div class="min-h-screen px-4 text-center">
-          <component
-            :is="modalController.TransitionChild"
+          <TransitionChild
             as="template"
             enter="duration-300 ease-out"
             enter-from="opacity-0"
@@ -64,15 +72,14 @@ export default class ModalPlaylists extends Vue {
             leave-from="opacity-100"
             leave-to="opacity-0"
           >
-            <component :is="modalController.DialogOverlay" class="fixed inset-0" />
-          </component>
+            <DialogOverlay class="fixed inset-0" />
+          </TransitionChild>
 
           <span class="inline-block h-screen align-middle" aria-hidden="true">
             &#8203;
           </span>
 
-          <component
-            :is="modalController.TransitionChild"
+          <TransitionChild
             as="template"
             enter="duration-300 ease-out"
             enter-from="opacity-0 scale-95"
@@ -84,13 +91,12 @@ export default class ModalPlaylists extends Vue {
             <div
               class="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl"
             >
-              <component
-                :is="modalController.DialogTitle"
+              <DialogTitle
                 as="h3"
                 class="text-lg font-medium leading-6 text-gray-900"
               >
                 {{ song?.title }}
-              </component>
+              </DialogTitle>
               <div class="mt-2">
                 <div v-if="!editNewPlaylist" class="mb-4 flex" @click="editNewPlaylist = true"><DocumentAddIcon class="h-5 w-5 mr-2"/>Nouvelle playlist</div>
                 <div v-else class="mb-4 flex">
@@ -103,7 +109,7 @@ export default class ModalPlaylists extends Vue {
                   </div>
                   </form>
                 </div>
-                <div v-for="(playlist, index) in modalController.controller.playlists" :key="`playlist-${index}`" class="flex">
+                <div v-for="(playlist, index) in modalController.playlists" :key="`playlist-${index}`" class="flex">
                   <ViewListIcon class="h-5 w-5 mr-2"/>{{ playlist.name }}
                 </div>
               </div>
@@ -118,9 +124,9 @@ export default class ModalPlaylists extends Vue {
                 </button>
               </div>
             </div>
-          </component>
+          </TransitionChild>
         </div>
       </div>
-    </component>
-  </component>
+    </Dialog>
+  </TransitionRoot>
 </template>

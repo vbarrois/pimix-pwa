@@ -3,22 +3,18 @@ import { Options, Vue, setup } from 'vue-class-component'
 import { eventBus } from '@/components/mixins/EventsManager'
 import { ToasterController } from '@/components/controllers/ToasterController'
 
-
 @Options({})
 export default class AppToaster extends Vue {
-  controller = setup(() => ToasterController())
+  toastController = setup(() => ToasterController())
 
   mounted () {
     eventBus.on('toast', (_content) => {
-      this.controller.push(_content)
+      this.toastController.push(_content)
     })
   }
 
   unmounted () {
     eventBus.off('toast')
-  }
-
-  created() {
   }
 }
 </script>
@@ -26,7 +22,7 @@ export default class AppToaster extends Vue {
 <template>
   <div class="absolute w-full top-0 z-50 mt-3 flex flex-col p-1 gap-1">
     <div
-      v-for="(toast, index) in controller.toasts"
+      v-for="(toast, index) in toastController.toasts"
       :key="`toast-${index}`"
       class="bg-white shadow-lg mx-auto w-96 max-w-full text-sm pointer-events-auto bg-clip-padding rounded-lg block animate-bounce"
       role="alert"

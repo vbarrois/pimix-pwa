@@ -54,11 +54,10 @@ const pages: Page[] = [
 @Options({})
 export default class AppHeader extends Vue {
 
-  displayedComponent: Page = pages[0]
+  displayedComponent: Page = pages[0] // default page
 
-  created () {
+  mounted () {
     eventBus.on('container', (_event: { component: string, options?: any }) => {
-      console.log('load component', _event.component)
       this.displayedComponent = {
         ..._.filter(pages, (page: Page) => {
           return page.name === _event.component
@@ -70,7 +69,8 @@ export default class AppHeader extends Vue {
     })
   }
 
-  mounted () {
+  unmounted () {
+    eventBus.off('container')
   }
 }
 </script>

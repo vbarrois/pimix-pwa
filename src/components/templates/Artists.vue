@@ -1,12 +1,14 @@
 <script lang='ts'>
-import { Options, Vue, setup } from 'vue-class-component'
-import { eventBus } from '@/components/mixins/EventsManager'
+import { Options, Vue } from 'vue-class-component'
 
 @Options({})
 export default class Artists extends Vue {
   // controller = setup(() => SongsController())
 
   mounted () {
+  }
+
+  unmounted () {
   }
 
   created() {

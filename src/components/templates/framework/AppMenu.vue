@@ -19,7 +19,6 @@ export default class AppMenu extends Vue {
 
   mounted () {
     eventBus.on('router', (_event: { status: boolean, attachedPimixId?: string }) => {
-      console.log('router message', _event)
       this.router.state = _event.status
       this.router.attachedPimixId = _event.attachedPimixId
     })

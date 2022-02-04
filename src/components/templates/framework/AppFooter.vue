@@ -2,33 +2,23 @@
 import _ from 'lodash'
 import { Options, Vue, setup } from 'vue-class-component'
 import { eventBus } from '@/components/mixins/EventsManager'
-import { shallowRef } from '@vue/reactivity'
-import { defineAsyncComponent } from '@vue/runtime-core'
 
 import { PlayerController } from '@/components/controllers/PlayerController'
 import { formatSeconds } from '@/components/mixins/tools'
 import { Song, Track } from '@/components/mixins/IPimix'
 
+import SongTools from '@/components/cards/SongTools.vue'
+import PlayerControl from '@/components/templates/PlayerControl.vue'
+
 @Options({
   props: {
     // displaymode: String
-  }
+  },
+  components: { SongTools, PlayerControl }
 })
 export default class AppFooter extends Vue {
   playerContoller = setup(() => PlayerController())
   displaymode: string = 'reduced'
-
-  SongTools = shallowRef(
-    defineAsyncComponent(() =>
-      import('@/components/cards/SongTools.vue')
-    )
-  )
-
-  PlayerControl = shallowRef(
-    defineAsyncComponent(() =>
-      import('@/components/templates/PlayerControl.vue')
-    )
-  )
 
   mounted () {
     eventBus.on('interface', (_event) => {
@@ -109,17 +99,12 @@ export default class AppFooter extends Vue {
       <div class="absolute bg-green-600 h-1.5" :style="`width: ${playerContoller.controller?.progressbar?.position}%`"></div>
       <div class="absolute bg-blue-800 h-1.5" :style="`width: ${playerContoller.controller?.progressbar?.start}%`"></div>
     </div>
-    <component
-      :is="SongTools"
+    <SongTools
       v-if="!isReduced" 
       :params="currentTrack()?.item"
       :toolbar="true"
-      class="w-full text-white bg-gray-800">
-    </component>
-
-    <component
-      :is="PlayerControl"
-      class="bg-gray-800"></component>
+      class="w-full text-white bg-gray-800"/>
+    <PlayerControl class="bg-gray-800"/>
   </div>
 </template>
 

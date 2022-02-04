@@ -2,20 +2,21 @@
 import _ from 'lodash'
 import { Options, Vue, setup } from 'vue-class-component'
 import { AppController } from '@/components/controllers/AppController'
-import { Song } from './components/mixins/IPimix'
-import { shallowRef } from '@vue/reactivity'
-import { defineAsyncComponent } from '@vue/runtime-core'
 
-@Options({})
+import AppToaster from '@/components/templates/framework/AppToaster.vue'
+import AppHeader from '@/components/templates/framework/AppHeader.vue'
+import AppContainer from '@/components/templates/framework/AppContainer.vue'
+import AppMenu from '@/components/templates/framework/AppMenu.vue'
+import AppFooter from '@/components/templates/framework/AppFooter.vue'
+
+import PlaylistModal from '@/components/templates/ModalPlaylists.vue'
+
+
+@Options({
+  components: { AppHeader, AppContainer, AppMenu, AppFooter, AppToaster, PlaylistModal }
+})
 export default class App extends Vue {
   appController = setup(() => AppController())
-
-  PlaylistModal = shallowRef(
-    defineAsyncComponent(() =>
-      import('@/components/templates/ModalPlaylists.vue')
-    )
-  )
-
 
   mounted() {
     this.appController.connect()
@@ -26,7 +27,8 @@ export default class App extends Vue {
     this.appController.init()
   }
 
-  beforeDestroy () {
+  unmounted () {
+    this.appController.quit()
   }
 
   footerSize (): string {
@@ -64,29 +66,20 @@ export default class App extends Vue {
 
 <template>
 
-  <component
-    :is="PlaylistModal"
-  ></component>
+  <PlaylistModal/>
   <main v-lazy:background-image="playingSongCover()" class="flex flex-col h-screen bg-cover">
-    <component
-      :is="appController.AppToaster"
-    ></component>
+    <AppToaster/>
     <div class="flex flex-1 overflow-hidden">
       <div class="flex max-w-30 bg-gray-900">
-        <component :is="appController.AppMenu"></component>
+        <AppMenu/>
       </div>
       <div class="flex flex-1 flex-col">
-        <div class="flex h-14 p-2"><component :is="appController.AppHeader"></component></div>
-        <div class="flex flex-1 overflow-y-auto my-2"><component :is="appController.AppContainer"></component></div>
+        <div class="flex h-14 p-2"><AppHeader/></div>
+        <div class="flex flex-1 overflow-y-auto my-2"><AppContainer/></div>
         <div class="relative flex bg-gray-500" :class="footerSize()">
-          <component
-            :is="appController.AppFooter"
+          <AppFooter
             :displaymode="appController.controller.footer.size"
-          ></component>
-          <!-- <span
-            class="absolute top-0 right-0 w-5 h-5 text-center font mt-2 ml-2 text-[12px] text-white font- bg-green-500 rounded-full pt-[1px]"
-            @click="setFooterSize('reduced')"
-          >Reduce</span> -->
+          />
         </div>
       </div>
     </div>
