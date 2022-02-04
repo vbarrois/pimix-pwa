@@ -4,7 +4,7 @@ import { PimixServer, Player, Queue, QueueItem, Vote } from "@/components/mixins
 export type PimixEvent = {
   router: { status: boolean, attachedPimixId?: string }
   pimixserver: { list?: PimixServer[], current?: PimixServer }
-  toast: string
+  toast: { message: string, severity: number }
   queue: { action: string, queue?: Queue, item?: QueueItem }
   vote: { action: string, votes?: Vote[], new?: Vote }
   player: { player: Player }

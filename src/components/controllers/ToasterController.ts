@@ -13,8 +13,8 @@ export const ToasterController = () => {
     mode: 13
   })
 
-  const push = (json: string): void => {
-    const toast: Toast = new Toast(json)
+  const push = (_toast: { message: string, severity: number }): void => {
+    const toast: Toast = new Toast(_toast)
     if (toast.isMode(controller.mode)) {
       controller.toasts.unshift(toast)
       toast.show(2000, clean)
@@ -35,8 +35,8 @@ export class Toast {
   protected message: string = ''
   protected severity: number = 0
   protected alive: boolean = true
-  constructor (json: string) {
-    const { message, severity } = JSON.parse(json)
+  constructor (_toast: { message: string, severity: number }) {
+    const { message, severity } = _toast
     this.message = message
     this.severity = severity
   }
